@@ -4,6 +4,7 @@ import {
     editarVisita,
     eliminarVisita,
     listarVisitas,
+    obtenerVisitaId,
 } from "../controllers/visita.controller.js";
 import { check } from "express-validator";
 import { Validation } from "../middlewares/validation.middleware.js";
@@ -12,6 +13,7 @@ import { JWTValidation } from "../middlewares/token-validation.middleware.js";
 const router = express.Router();
 
 router.get("/", JWTValidation, listarVisitas);
+router.get("/:id", JWTValidation, obtenerVisitaId);
 
 router.post(
   "/",

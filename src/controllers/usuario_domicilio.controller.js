@@ -6,6 +6,30 @@ import {
 } from "../models/asociaciones.js";
 import createError from "http-errors";
 
+
+export const listarAsociarUsuarioDomicilio = async (req, res, next) => {
+  const { usuario } = req.body;
+  console.log(usuario);
+  try {
+    const peticion = await Usuario_domicilio.findOne({
+      where: {
+        UsuarioId: usuario.id,
+      },
+    });
+    if (!peticion) {
+      throw new createError(404, "No tienes peticiones de asociacion de domicilios");
+    }
+
+    res.json({
+      mensaje: "Lista de peticiones del usuario",
+      data: peticion,
+    });
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+};
+
 export const asociarUsuarioDomicilio = async (req, res, next) => {
   const { usuario, domicilio } = req.body;
   try {

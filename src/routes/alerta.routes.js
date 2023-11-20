@@ -30,32 +30,22 @@ router.put(
   [
     JWTValidation,
     RoleValidation,
-    check("Estado", "Estado es obligatorio").not().isEmpty(),
     check("Resolucion", "Resolucion es obligatorio").not().isEmpty(),
     Validation,
   ],
   rechazarAlerta
 );
 
+router.put("/aprobar/:id", [JWTValidation, RoleValidation], aprobarAlerta);
 router.put(
-    "/aprobar/:id",
-    [
-      JWTValidation,
-      RoleValidation,
-      check("Estado", "Estado es obligatorio").not().isEmpty(),
-      Validation,
-    ],
-    aprobarAlerta
-  );
-  router.put(
-    "/:id",
-    [
-      JWTValidation,
-      check("Motivo", "Motivo es obligatorio").not().isEmpty(),
-      check("Prioridad", "Prioridad es obligatorio").not().isEmpty(),
-      Validation,
-    ],
-    editarAlerta
-  );
-  
+  "/:id",
+  [
+    JWTValidation,
+    check("Motivo", "Motivo es obligatorio").not().isEmpty(),
+    check("Prioridad", "Prioridad es obligatorio").not().isEmpty(),
+    Validation,
+  ],
+  editarAlerta
+);
+
 export default router;

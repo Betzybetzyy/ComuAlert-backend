@@ -60,3 +60,20 @@ export const eliminarDomicilio = async (req, res, next) => {
       next(e);
     }
   };
+
+  export const obtenerDomicilioId = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+      const domicilio = await Domicilio.findByPk(id);
+      if (!domicilio) {
+        throw new createError(404, "Domicilio no encontrado");
+      }
+      res.json({
+        mensaje: "Domicilio obtenido",
+        data: domicilio,
+      });
+    } catch (e) {
+        console.log(e)
+      next(e);
+    }
+  };

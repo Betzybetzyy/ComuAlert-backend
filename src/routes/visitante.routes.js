@@ -5,6 +5,7 @@ import {
   eliminarVisitante,
   eliminarFavorito,
   listarVisitantes,
+  obtenerVisitanteId,
 } from "../controllers/visitante.controller.js";
 import { check } from "express-validator";
 import { Validation } from "../middlewares/validation.middleware.js";
@@ -13,6 +14,7 @@ import { JWTValidation } from "../middlewares/token-validation.middleware.js";
 const router = express.Router();
 
 router.get("/", JWTValidation, listarVisitantes);
+router.get("/:id", JWTValidation, obtenerVisitanteId);
 
 router.post(
   "/",

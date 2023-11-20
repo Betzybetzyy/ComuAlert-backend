@@ -1,4 +1,4 @@
-import {Usuario} from "../models/asociaciones.js";
+import { Usuario } from "../models/asociaciones.js";
 import createError from "http-errors";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -11,6 +11,7 @@ export const login = async (req, res, next) => {
         Email: Email,
       },
     });
+
     if (!usuario) {
       throw new createError(404, "Usuario no encontrado");
     }
@@ -24,8 +25,8 @@ export const login = async (req, res, next) => {
     delete usuarioObj.Contrasena;
     const token = await generarToken(usuarioObj);
     res.json({
-        token,
-      });
+      data: { ...usuarioObj, token },
+    });
   } catch (e) {
     console.log(e);
     next(e);

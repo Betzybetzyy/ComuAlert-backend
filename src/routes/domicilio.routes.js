@@ -3,6 +3,7 @@ import {
   crearDomicilio,
   eliminarDomicilio,
   listarDomicilio,
+  obtenerDomicilioId,
 } from "../controllers/domicilio.controller.js";
 import { check } from "express-validator";
 import { Validation } from "../middlewares/validation.middleware.js";
@@ -10,6 +11,7 @@ import { JWTValidation } from "../middlewares/token-validation.middleware.js";
 import {
   aprobarUsuarioDomicilio,
   asociarUsuarioDomicilio,
+  listarAsociarUsuarioDomicilio,
   rechazarUsuarioDomicilio,
 } from "../controllers/usuario_domicilio.controller.js";
 import { RoleValidation } from "../middlewares/role-validation.middleware.js";
@@ -17,6 +19,8 @@ import { RoleValidation } from "../middlewares/role-validation.middleware.js";
 const router = express.Router();
 
 router.get("/", JWTValidation, listarDomicilio);
+router.get("/asociar/peticion", JWTValidation, listarAsociarUsuarioDomicilio)
+router.get("/:id", JWTValidation, obtenerDomicilioId);
 
 router.post(
   "/",
@@ -41,7 +45,11 @@ router.post(
   asociarUsuarioDomicilio
 );
 
-router.put("/aprobar/:id", [JWTValidation, RoleValidation], aprobarUsuarioDomicilio);
+router.put(
+  "/aprobar/:id",
+  [JWTValidation, RoleValidation],
+  aprobarUsuarioDomicilio
+);
 
 router.put(
   "/rechazar/:id",
@@ -54,7 +62,6 @@ router.put(
   rechazarUsuarioDomicilio
 );
 
-
-router.delete("/:id", JWTValidation, eliminarDomicilio);
+router.delete("/:id", [JWTValidation, RoleValidation], eliminarDomicilio);
 
 export default router;

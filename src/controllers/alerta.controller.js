@@ -58,7 +58,7 @@ export const editarAlerta = async (req, res, next) => {
         throw new createError(404, "Alerta no encontrada");
       }
   
-      alerta.Estado = body.Estado;
+      alerta.Estado = 'RECHAZADA';
       alerta.Responsable = body.usuario.id
       alerta.Resolucion = body.Resolucion;
       alerta.FechaEdicion = Date.now();
@@ -85,7 +85,7 @@ export const editarAlerta = async (req, res, next) => {
         throw new createError(404, "Alerta no encontrada");
       }
   
-      alerta.Estado = body.Estado;
+      alerta.Estado = 'APROBADA';
       alerta.Responsable = body.usuario.id
       alerta.FechaEdicion = Date.now();
       await alerta.save();
@@ -103,7 +103,11 @@ export const editarAlerta = async (req, res, next) => {
 
   export const listarAlertas = async (req, res, next) => {
     try {
-      const alerta = await Alerta.findAll();
+      const alerta = await Alerta.findAll({
+        order: [
+          ['FechaCreacion', 'DESC']
+        ]
+      });
       if (!alerta) {
         throw new createError(404, "Alertas no encontrados");
       }

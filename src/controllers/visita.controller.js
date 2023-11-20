@@ -87,3 +87,20 @@ export const listarVisitas = async (req, res, next) => {
     next(e);
   }
 };
+
+export const obtenerVisitaId = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const visita = await Visita.findByPk(id);
+    if (!visita) {
+      throw new createError(404, "Visita no encontrado");
+    }
+    res.json({
+      mensaje: "Visita obtenido",
+      data: visita,
+    });
+  } catch (e) {
+      console.log(e)
+    next(e);
+  }
+};

@@ -1,11 +1,12 @@
 import { Vehiculo } from "../models/asociaciones.js";
 import createError from "http-errors";
 
-
 export const crearVehiculo = async (req, res, next) => {
   const { body } = req;
   try {
     const vehiculo = new Vehiculo(body);
+    vehiculo.UsuarioId = body.usuario.id;
+    vehiculo.EsVisita = body.EsVisita;
     await vehiculo.save();
 
     const vehiculoObj = vehiculo.toJSON();
@@ -20,30 +21,31 @@ export const crearVehiculo = async (req, res, next) => {
 };
 
 export const editarVehiculo = async (req, res, next) => {
-    const { id } = req.params;
-    const { body } = req;
-  
-    try {
-      const vehiculo = await Vehiculo.findByPk(id);
-      if (!vehiculo) {
-        throw new createError(404, "Vehiculo no encontrado");
-      }
-  
-      vehiculo.Marca = body.Marca;
-      vehiculo.Modelo = body.Modelo;
-      vehiculo.Ano = body.Ano;
-      vehiculo.FechaEdicion = Date.now();
-      await vehiculo.save();
-  
-      const vehiculoEditado = vehiculo.toJSON();
-      res.json({
-        mensaje: "Vehiculo editado correctamente",
-        data: vehiculoEditado,
-      });
-    } catch (e) {
-      next(e);
+  const { id } = req.params;
+  const { body } = req;
+
+  try {
+    const vehiculo = await Vehiculo.findByPk(id);
+    if (!vehiculo) {
+      throw new createError(404, "Vehiculo no encontrado");
     }
-  };
+
+    vehiculo.Marca = body.Marca;
+    vehiculo.Modelo = body.Modelo;
+    vehiculo.Ano = body.Ano;
+    vehiculo.FechaEdicion = Date.now();
+    vehiculo.EsVisita = body.EsVisita;
+    await vehiculo.save();
+
+    const vehiculoEditado = vehiculo.toJSON();
+    res.json({
+      mensaje: "Vehiculo editado correctamente",
+      data: vehiculoEditado,
+    });
+  } catch (e) {
+    next(e);
+  }
+};
 
 export const eliminarVehiculo = async (req, res, next) => {
   const { id } = req.params;
@@ -72,6 +74,7 @@ export const listarVehiculos = async (req, res, next) => {
     const vehiculo = await Vehiculo.findAll({
       where: {
         Estado: true,
+        UsuarioId: req.body.usuario.id,
       },
     });
     if (!vehiculo) {
@@ -96,29 +99,29 @@ export const buscarPatente = async (req, res, next) => {
       },
     });
     if (!vehiculo) {
-        throw new createError(404, "Vehiculo no encontrado");
-      }
-      res.json({
-        mensaje: "Vehiculo obtenido",
-        data: vehiculo,
-      });
+      throw new createError(404, "Vehiculo no encontrado");
+    }
+    res.json({
+      mensaje: "Vehiculo obtenido",
+      data: vehiculo,
+    });
   } catch (e) {
     next(e);
   }
 };
 
 export const buscarVehiculoId = async (req, res, next) => {
-    const { id } = req.params;
-    try {
-      const vehiculo = await Vehiculo.findByPk(id);
-      if (!vehiculo) {
-          throw new createError(404, "Vehiculo no encontrado");
-        }
-        res.json({
-          mensaje: "Vehiculo obtenido",
-          data: vehiculo,
-        });
-    } catch (e) {
-      next(e);
+  const { id } = req.params;
+  try {
+    const vehiculo = await Vehiculo.findByPk(id);
+    if (!vehiculo) {
+      throw new createError(404, "Vehiculo no encontrado");
     }
-  };
+    res.json({
+      mensaje: "Vehiculo obtenido",
+      data: vehiculo,
+    });
+  } catch (e) {
+    next(e);
+  }
+};

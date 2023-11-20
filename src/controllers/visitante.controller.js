@@ -114,3 +114,20 @@ export const eliminarFavorito = async (req, res, next) => {
       next(e);
     }
   };
+
+  export const obtenerVisitanteId = async (req, res, next) => {
+    const { id } = req.params;
+    try {
+      const visitante = await Visitante.findByPk(id);
+      if (!visitante) {
+        throw new createError(404, "Visitante no encontrado");
+      }
+      res.json({
+        mensaje: "Visitante obtenido",
+        data: visitante,
+      });
+    } catch (e) {
+        console.log(e)
+      next(e);
+    }
+  };
