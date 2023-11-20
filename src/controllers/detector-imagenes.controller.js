@@ -5,7 +5,7 @@ import { googleConfig } from "../utils/google-secret.helper.js";
 const client = new ImageAnnotatorClient({
   credentials: googleConfig,
 });
-const PATENTE_REGEX = /([A-Z]{2})\W*([A-Z]{2})\W*(\d{2})/;
+const PATENTE_REGEX = /([A-Z]{2})-?(\d{2})-?(\d{2})/; // Ajuste en la expresión regular
 
 export const detectorPatentes = async (req, res, next) => {
   try {
@@ -14,10 +14,11 @@ export const detectorPatentes = async (req, res, next) => {
     const [result] = await client.textDetection(buffer);
     const detections = result.textAnnotations;
     const descriptions = detections.map((detection) => detection.description);
+    console.log(descriptions);
     const fullDescription = descriptions.join(" ");
 
-    const licensePlate = fullDescription.match(PATENTE_REGEX);
-    const plate = licensePlate ? licensePlate.slice(1, 4).join("") : null;
+    const licensePlateMatch = fullDescription.match(PATENTE_REGEX);
+    const plate = licensePlateMatch ? licensePlateMatch.slice(1).join("") : null;
 
     if (!plate) {
       throw new createHttpError(404, "Patente no encontrada");
@@ -28,3 +29,4 @@ export const detectorPatentes = async (req, res, next) => {
     next(err);
   }
 };
+

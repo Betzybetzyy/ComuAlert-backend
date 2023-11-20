@@ -11,7 +11,7 @@ export const crearAlerta = async (req, res, next) => {
 
     const alertaObj = alerta.toJSON();
     res.json({
-      mensaje: "Visita creada",
+      mensaje: "Alerta creada",
       data: alertaObj,
     });
   } catch (e) {
