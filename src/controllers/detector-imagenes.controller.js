@@ -14,7 +14,6 @@ export const detectorPatentes = async (req, res, next) => {
     const [result] = await client.textDetection(buffer);
     const detections = result.textAnnotations;
     const descriptions = detections.map((detection) => detection.description);
-    console.log(descriptions);
     const fullDescription = descriptions.join(" ");
 
     const licensePlateMatch = fullDescription.match(PATENTE_REGEX);

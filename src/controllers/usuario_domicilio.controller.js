@@ -6,10 +6,38 @@ import {
 } from "../models/asociaciones.js";
 import createError from "http-errors";
 
+export const listarPeticiones = async (req, res, next) => {
+  const { usuario } = req.body;
+  try {
+    const peticion = await Usuario_domicilio.findAll({
+      include: [
+        {
+          model: Usuario,
+        },
+        {
+          model: Domicilio,
+        },
+      ],
+    });
+    if (!peticion) {
+      throw new createError(
+        404,
+        "No tienes peticiones de asociacion de domicilios"
+      );
+    }
+
+    res.json({
+      mensaje: "Lista de peticiones",
+      data: peticion,
+    });
+  } catch (e) {
+    console.log(e);
+    next(e);
+  }
+};
 
 export const listarAsociarUsuarioDomicilio = async (req, res, next) => {
   const { usuario } = req.body;
-  console.log(usuario);
   try {
     const peticion = await Usuario_domicilio.findOne({
       where: {
@@ -17,7 +45,10 @@ export const listarAsociarUsuarioDomicilio = async (req, res, next) => {
       },
     });
     if (!peticion) {
-      throw new createError(404, "No tienes peticiones de asociacion de domicilios");
+      throw new createError(
+        404,
+        "No tienes peticiones de asociacion de domicilios"
+      );
     }
 
     res.json({
@@ -85,7 +116,7 @@ export const rechazarUsuarioDomicilio = async (req, res, next) => {
       throw new createError(404, "Solicitud no encontrada");
     }
     usuarioDomicilioBD.Estado = "RECHAZADO";
-    usuarioDomicilioBD.Resolucion = body.resolucion;
+    usuarioDomicilioBD.Resolucion = body.Resolucion;
     usuarioDomicilioBD.FechaActualizacion = Date.now();
     usuarioDomicilioBD.save();
 

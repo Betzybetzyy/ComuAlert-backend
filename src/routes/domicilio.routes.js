@@ -12,6 +12,7 @@ import {
   aprobarUsuarioDomicilio,
   asociarUsuarioDomicilio,
   listarAsociarUsuarioDomicilio,
+  listarPeticiones,
   rechazarUsuarioDomicilio,
 } from "../controllers/usuario_domicilio.controller.js";
 import { RoleValidation } from "../middlewares/role-validation.middleware.js";
@@ -19,7 +20,8 @@ import { RoleValidation } from "../middlewares/role-validation.middleware.js";
 const router = express.Router();
 
 router.get("/", JWTValidation, listarDomicilio);
-router.get("/asociar/peticion", JWTValidation, listarAsociarUsuarioDomicilio)
+router.get("/peticiones", [JWTValidation, RoleValidation], listarPeticiones);
+router.get("/asociar/peticion", JWTValidation, listarAsociarUsuarioDomicilio);
 router.get("/:id", JWTValidation, obtenerDomicilioId);
 
 router.post(
@@ -56,7 +58,7 @@ router.put(
   [
     JWTValidation,
     RoleValidation,
-    check("resolucion", "Resolución es obligatorio").not().isEmpty(),
+    check("Resolucion", "Resolución es obligatorio").not().isEmpty(),
     Validation,
   ],
   rechazarUsuarioDomicilio

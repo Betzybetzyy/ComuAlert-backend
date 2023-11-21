@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.get("/", JWTValidation, listarVehiculos);
 
-router.get("/patente", JWTValidation, buscarPatente);
+router.get("/patente/:patente", JWTValidation, buscarPatente);
 router.get("/:id", JWTValidation, buscarVehiculoId);
 
 router.post(

@@ -90,12 +90,11 @@ export const listarVehiculos = async (req, res, next) => {
 };
 
 export const buscarPatente = async (req, res, next) => {
-  const { body } = req;
+  const { patente } = req.params;
   try {
-    console.log(body.Patente);
     const vehiculo = await Vehiculo.findOne({
       where: {
-        Patente: body.Patente,
+        Patente: patente,
       },
     });
     if (!vehiculo) {
