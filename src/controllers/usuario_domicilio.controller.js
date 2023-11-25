@@ -45,10 +45,10 @@ export const listarAsociarUsuarioDomicilio = async (req, res, next) => {
       },
     });
     if (!peticion) {
-      throw new createError(
-        404,
-        "No tienes peticiones de asociacion de domicilios"
-      );
+      res.json({
+        mensaje: "Lista de peticiones del usuario",
+        data: {},
+      });
     }
 
     res.json({
