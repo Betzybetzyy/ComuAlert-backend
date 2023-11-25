@@ -1,6 +1,13 @@
 export const errorHandler = (err, _req, res, _next) => {
+  console.log(err.name);
   const error = { ...err };
   error.message = err.message;
+  error.status = err.status
+
+  if (err.name === "ValidationError") {
+    error.message = Object.values(err.errors).map((val) => val.message);
+    error.status = 400;
+  }
 
   if (err.name === 'SequelizeValidationError') {
     const messages = err.errors.map(e => e.message);
@@ -30,6 +37,7 @@ export const errorHandler = (err, _req, res, _next) => {
   }
 
   return res.status(error.status).json({
+    status: error.status,
     message: error.message
   });
 };
