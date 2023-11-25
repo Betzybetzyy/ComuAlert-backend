@@ -40,7 +40,6 @@ router.post(
   "/asociar",
   [
     JWTValidation,
-    RoleValidation,
     check("domicilio", "Id del domicilio es obligatorio").not().isEmpty(),
     Validation,
   ],

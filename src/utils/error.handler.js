@@ -1,5 +1,4 @@
 export const errorHandler = (err, _req, res, _next) => {
-  console.log(err.name);
   const error = { ...err };
   error.message = err.message;
   error.status = err.status
