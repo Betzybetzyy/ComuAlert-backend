@@ -1,4 +1,9 @@
-import { Alerta, Domicilio, Usuario } from "../models/asociaciones.js";
+import {
+  Alerta,
+  Domicilio,
+  Usuario,
+  Usuario_domicilio,
+} from "../models/asociaciones.js";
 import createError from "http-errors";
 
 export const crearAlerta = async (req, res, next) => {
@@ -102,11 +107,10 @@ export const aprobarAlerta = async (req, res, next) => {
 
 export const listarAlertas = async (req, res, next) => {
   const { usuario } = req.body;
-  s;
   try {
     let condicionesDeBusqueda = {};
 
-    if (usuario.rol !== "ADMIN") {
+    if (usuario.Rol !== "ADMIN") {
       condicionesDeBusqueda = {
         where: { UsuarioId: usuario.id },
       };
@@ -115,7 +119,14 @@ export const listarAlertas = async (req, res, next) => {
         include: [
           {
             model: Usuario,
-            include: [{ model: Domicilio }],
+            attributes: ["Nombre", "Apellido", "DomicilioId"],
+            include: [
+              {
+                model: Domicilio,
+                as: "DomicilioUsuario",
+                attributes: ["Direccion"],
+              },
+            ],
           },
         ],
       };
